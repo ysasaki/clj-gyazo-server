@@ -65,4 +65,4 @@
 
 (defn -main [port]
   (server/run-server app {:port (Integer. port)})
-  (println ("Starting server on port" port)))
+  (println (str "Starting server on port " port)))
