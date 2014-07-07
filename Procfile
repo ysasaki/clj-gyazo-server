@@ -1,1 +1,1 @@
-web: java $JVM_OPTS -jar target/gyazo-server-standalone.jar $PORT
+web: java $JAVA_OPTS -jar target/gyazo-server-standalone.jar $PORT
