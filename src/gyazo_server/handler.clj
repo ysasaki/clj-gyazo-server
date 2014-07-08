@@ -19,12 +19,12 @@
       (t/to-time-zone (t/time-zone-for-offset +9))
       (.toString "yyyy-MM-dd HH:mm:ss z")))
 
-(defn- save-file! [tempfile]
+(defn- save-file! [image-dir tempfile]
   (let [hash (digest/md5 tempfile)]
     (io/copy tempfile (io/file (str image-dir "/" hash ".png")))
     hash))
 
-(defn- store-id! [id hash]
+(defn- store-id! [db-store id hash]
    (swap! db-store assoc hash id))
 
 (defn- create-newid [remote_addr dt]
@@ -37,12 +37,12 @@
     {host "host"} :headers
     scheme :scheme
     remote-addr :remote-addr}]
-  (let [hash (save-file! tempfile)
+  (let [hash (save-file! image-dir tempfile)
         newid (create-newid remote-addr (local-now))
         res (response/content-type
              (response/response (str (name scheme) "://" host "/" hash ".png"))
              "text/plain")]
-    (store-id! (if (empty? id) newid id) hash)
+    (store-id! db-store (if (empty? id) newid id) hash)
     (if (empty? id)
       (response/header res "X-Gyazo-Id" newid)
       res)))

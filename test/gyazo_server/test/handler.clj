@@ -1,16 +1,26 @@
 (ns gyazo-server.test.handler
   (:require [clojure.test :refer :all]
-            [gyazo-server.handler :as gs :refer :all]
-            [ring.mock.request :as mock]
-            [clj-time.core :as t]
-            [clj-time.format :as f]))
+            [gyazo-server.handler :as hdl :refer :all]
+            [ring.mock.request :as mock]))
+
+(deftest test-local-now
+  (is (re-find
+       #"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}$"
+       (#'hdl/local-now))))
+
+(deftest test-store-id!
+  (is (let [db-store (atom {})
+            id "test-id"
+            hash "test-hash"]
+        (#'hdl/store-id! db-store id hash)
+        (= (get @db-store hash) id))))
 
 (deftest test-create-newid
   (is (=
-       (create-newid "10.0.0.1" "2014-07-02 21:50:59 +0900")
+       (#'hdl/create-newid "10.0.0.1" "2014-07-02 21:50:59 +0900")
        "44dd614ba8fa168440cddd8a2e7ca2af")))
 
-(test-create-newid)
+;; (run-all-tests)
 
 ;; (deftest test-app
 ;;   (testing "main route"
