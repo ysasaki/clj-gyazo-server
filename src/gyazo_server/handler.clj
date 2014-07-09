@@ -17,7 +17,7 @@
 (defn- local-now []
   (-> (t/now)
       (t/to-time-zone (t/time-zone-for-offset +9))
-      (.toString "yyyy-MM-dd HH:mm:ss z")))
+      (.toString "yyyy-MM-dd HH:mm:ss Z")))
 
 (defn- save-file! [image-dir tempfile]
   (let [hash (digest/md5 tempfile)]

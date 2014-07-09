@@ -13,7 +13,7 @@
 ;; tests
 (deftest test-local-now
   (is (re-find
-       #"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{2}:\d{2}$"
+       #"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} [+-]\d{4}$"
        (#'hdl/local-now))))
 
 (deftest test-store-id!
