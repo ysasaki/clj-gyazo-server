@@ -1,4 +1,4 @@
-(defproject gyazo-server "0.1.0-SNAPSHOT"
+(defproject gyazo-server "0.2.0-SNAPSHOT"
   :description "Gyazo Server written in Clojure"
   :url "https://github.com/ysasaki/gyazo-server"
   :dependencies [[org.clojure/clojure "1.6.0"]
