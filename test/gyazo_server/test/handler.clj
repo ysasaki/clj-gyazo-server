@@ -1,19 +1,14 @@
 (ns gyazo-server.test.handler
+  (:import java.io.File)
   (:require [clojure.test :refer :all]
             [clojure.java.io :as io]
             [gyazo-server.handler :as hdl :refer :all]
             [ring.mock.request :as mock]))
 
 ;; private
-(defn- create-temp-dir [dir]
-  (doto
-    (io/file dir)
-    (.mkdir)))
-
 (defn- create-temp-file [file content]
-  (let [file (io/file file)]
-    (spit file content)
-    file))
+  (spit file content)
+  file)
 
 ;; tests
 (deftest test-local-now
@@ -31,10 +26,9 @@
 (deftest test-save-file!
   (is
    (let [
-         tempdir (create-temp-dir
-                  (str (System/getProperty "java.io.tmpdir") "/data"))
+         tempdir (System/getProperty "java.io.tmpdir")
          tempfile (create-temp-file
-                   (str tempdir "/foo") "content")]
+                   (File/createTempFile "test" ".txt") "content")]
      (#'hdl/save-file! tempdir tempfile))
    "9a0364b9e99bb480dd25e1f0284c8555"))
 
@@ -42,7 +36,6 @@
   (is (=
        (#'hdl/create-newid "10.0.0.1" "2014-07-02 21:50:59 +0900")
        "44dd614ba8fa168440cddd8a2e7ca2af")))
-
 
 ;; (run-all-tests)
 
