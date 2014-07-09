@@ -37,13 +37,30 @@
        (#'hdl/create-newid "10.0.0.1" "2014-07-02 21:50:59 +0900")
        "44dd614ba8fa168440cddd8a2e7ca2af")))
 
-;; (run-all-tests)
+(deftest test-app
+  (testing "POST /upload"
+    (let [file (create-temp-file
+                (File/createTempFile "test" ".png") "imagedata")
+          imagedata {:tempfile file
+                     :content-type "image/png"
+                     :filename "test.png"}
+          request (assoc
+                    (mock/request :post "/upload")
+                    :params {:id "test-id" :imagedata imagedata}
+                    :multipart-params {:imagedata imagedata})
+          response (hdl/app request)]
+      (is (= (:status response) 200))
+      (is (= (:body response) "http://localhost/a05c41e120e6a1deee2ff0feb83fabd5.png"))))
 
-;; (deftest test-app
-;;   (testing "main route"
-;;     (let [resonse (app (mock/request :get "/"))]
-;;       (is (= (:status response) 200))
-;;       (is (= (:body response) "Hello World"))))
-;;   (testing "not-found route"
-;;     (let [response (app (mock/request :get "/invalid"))]
-;;       (is (= (:status response) 404)))))
+  (testing "GET /a05c41e120e6a1deee2ff0feb83fabd5.png"
+    (let [response (hdl/app
+                    (mock/request :get "/a05c41e120e6a1deee2ff0feb83fabd5.png"))]
+      (is (= (:status response) 200))
+      (is (= (-> (:headers response) (get "Content-Type")) "image/png"))
+      (is (= (-> (:body response) slurp) "imagedata"))))
+
+  (testing "not-found route"
+    (let [response (app (mock/request :get "/invalid"))]
+      (is (= (:status response) 404)))))
+
+;; (run-all-tests)
