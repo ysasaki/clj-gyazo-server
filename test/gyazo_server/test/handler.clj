@@ -38,14 +38,14 @@
        "44dd614ba8fa168440cddd8a2e7ca2af")))
 
 (deftest test-app
-  (testing "POST /upload"
+  (testing "POST /upload.cgi"
     (let [file (create-temp-file
                 (File/createTempFile "test" ".png") "imagedata")
           imagedata {:tempfile file
                      :content-type "image/png"
                      :filename "test.png"}
           request (assoc
-                    (mock/request :post "/upload")
+                    (mock/request :post "/upload.cgi")
                     :params {:id "test-id" :imagedata imagedata}
                     :multipart-params {:imagedata imagedata})
           response (hdl/app request)]

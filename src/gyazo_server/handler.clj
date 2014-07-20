@@ -58,7 +58,7 @@
 (defroutes app-routes
   (GET "/" [] (v/index-view))
   (GET "/:hash.png" {{hash :hash} :params} (serve-png hash))
-  (POST "/upload" request (upload request))
+  (POST "/upload.cgi" request (upload request))
   (route/not-found "Not Found"))
 
 (def app (handler/site app-routes))
