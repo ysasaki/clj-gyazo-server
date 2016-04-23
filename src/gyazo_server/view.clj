@@ -12,7 +12,7 @@
   (layout
    (form/form-to
     {:enctype "multipart/form-data"}
-    [:post "/upload"]
+    [:post "/upload.cgi"]
     (form/text-field "id")
     (form/file-upload "imagedata")
     (form/submit-button "Upload"))))

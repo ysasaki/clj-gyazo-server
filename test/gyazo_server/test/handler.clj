@@ -57,6 +57,8 @@
                     (mock/request :get "/a05c41e120e6a1deee2ff0feb83fabd5.png"))]
       (is (= (:status response) 200))
       (is (= (-> (:headers response) (get "Content-Type")) "image/png"))
+      (is (= (-> (:headers response) (get "Content-Length")) (str (.length
+                                                                    "iamgedata"))))
       (is (= (-> (:body response) slurp) "imagedata"))))
 
   (testing "not-found route"
